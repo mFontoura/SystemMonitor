@@ -22,3 +22,8 @@ debug:
 .PHONY: clean
 clean:
 	rm -rf build
+
+.PHONY: clean-debug
+clean-debug:
+	make clean
+	make debug
