@@ -6,6 +6,10 @@
 #include <string>
 
 namespace LinuxParser {
+
+// Utils
+std::string GetValueFromFile(std::ifstream &steam, std::string label);
+
 // Paths
 const std::string kProcDirectory{"/proc/"};
 const std::string kCmdlineFilename{"/cmdline"};

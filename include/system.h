@@ -21,7 +21,6 @@ class System {
 
   // TODO: Define any necessary private members
  private:
-  //LinuxParser _parser;
   Processor cpu_ = {};
   std::vector<Process> processes_ = {};
 };
