@@ -21,22 +21,25 @@ Processor& System::Cpu() { return cpu_; }
 vector<Process>& System::Processes() { return processes_; }
 
 string System::Kernel() { 
-    return LinuxParser::Kernel(); }
+    return LinuxParser::Kernel(); 
+}
 
 float System::MemoryUtilization() { 
-    return LinuxParser::MemoryUtilization(); }
+    return LinuxParser::MemoryUtilization();
+}
 
-string System::OperatingSystem() { 
-    
+string System::OperatingSystem() {     
     return LinuxParser::OperatingSystem();
 }
 
 int System::RunningProcesses() { 
-    return LinuxParser::RunningProcesses(); }
+    return LinuxParser::RunningProcesses(); 
+}
 
 int System::TotalProcesses() { 
-    return LinuxParser::TotalProcesses(); }
+    return LinuxParser::TotalProcesses(); 
+}
 
 long int System::UpTime() {
     return LinuxParser::UpTime();
- }
+}
