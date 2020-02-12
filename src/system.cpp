@@ -15,14 +15,11 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-// TODO: Return the system's CPU
 Processor& System::Cpu() { 
     if(_cpu == nullptr){
-        //std::cout<<"new\n";
         _cpu = new Processor(LinuxParser::CpuUtilization());
         return *_cpu;
     }
-    //std::cout<<"exists\n";
     _cpu->UpdateStats(LinuxParser::CpuUtilization());
 
     return *_cpu;
