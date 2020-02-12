@@ -101,7 +101,7 @@ long LinuxParser::IdleJiffies() { return 0; }
 
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() { 
-  
+
     string label, usertime, nicetime, systemtime, idletime, iowait, irq, softirq, steal, guest, guestnice;
     string line;
     std::ifstream stream(kProcDirectory + kStatFilename);
@@ -110,7 +110,7 @@ vector<string> LinuxParser::CpuUtilization() {
       std::istringstream linestream(line);
       linestream >> label >> usertime >> nicetime >> systemtime >> idletime >> iowait >> irq >> softirq >> steal >> guest >> guestnice;
     }
-
+    
     return std::vector<string> {usertime, nicetime, systemtime, idletime, iowait, irq, softirq, steal, guest, guestnice};
   
 }

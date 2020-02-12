@@ -3,6 +3,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "process.h"
 #include "processor.h"
@@ -15,7 +16,17 @@ using std::string;
 using std::vector;
 
 // TODO: Return the system's CPU
-Processor& System::Cpu() { return _cpu; }
+Processor& System::Cpu() { 
+    if(_cpu == nullptr){
+        //std::cout<<"new\n";
+        _cpu = new Processor(LinuxParser::CpuUtilization());
+        return *_cpu;
+    }
+    //std::cout<<"exists\n";
+    _cpu->UpdateStats(LinuxParser::CpuUtilization());
+
+    return *_cpu;
+ }
 
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() { return _processes; }
