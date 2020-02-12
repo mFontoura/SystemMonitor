@@ -15,10 +15,10 @@ using std::string;
 using std::vector;
 
 // TODO: Return the system's CPU
-Processor& System::Cpu() { return cpu_; }
+Processor& System::Cpu() { return _cpu; }
 
 // TODO: Return a container composed of the system's processes
-vector<Process>& System::Processes() { return processes_; }
+vector<Process>& System::Processes() { return _processes; }
 
 string System::Kernel() { 
     return LinuxParser::Kernel(); 
