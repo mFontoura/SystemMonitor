@@ -4,6 +4,8 @@
 #include <thread>
 #include <vector>
 
+#include <iostream>
+
 #include "format.h"
 #include "ncurses_display.h"
 #include "system.h"
@@ -83,6 +85,11 @@ void NCursesDisplay::DisplayProcesses(std::vector<Process>& processes,
 }
 
 void NCursesDisplay::Display(System& system, int n) {
+
+  if(system.Processes().size() > 0){
+    n = system.Processes().size();
+  }  
+
   initscr();      // start ncurses
   noecho();       // do not print input values
   cbreak();       // terminate ncurses on ctrl + c

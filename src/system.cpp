@@ -15,18 +15,29 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-Processor& System::Cpu() { 
+System::System(){
+
     if(_cpu == nullptr){
         _cpu = new Processor(LinuxParser::CpuUtilization());
-        return *_cpu;
     }
-    _cpu->UpdateStats(LinuxParser::CpuUtilization());
 
+    auto pids = LinuxParser::Pids();
+    _processes = new vector<Process>;
+    for (int i = 0; i < pids.size(); i++){
+        Process* newProc = new Process(pids.at(i));
+        _processes->push_back(*newProc);
+    }    
+}
+
+Processor& System::Cpu() { 
+    _cpu->UpdateStats(LinuxParser::CpuUtilization());
     return *_cpu;
  }
 
 // TODO: Return a container composed of the system's processes
-vector<Process>& System::Processes() { return _processes; }
+vector<Process>& System::Processes() { 
+    return *_processes;
+ }
 
 string System::Kernel() { 
     return LinuxParser::Kernel(); 
