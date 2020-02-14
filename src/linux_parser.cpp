@@ -99,7 +99,7 @@ long LinuxParser::ActiveJiffies() { return 0; }
 // TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies() { return 0; }
 
-// TODO: Read and return CPU utilization
+
 vector<string> LinuxParser::CpuUtilization() { 
 
     string label, usertime, nicetime, systemtime, idletime, iowait, irq, softirq, steal, guest, guestnice;
@@ -112,7 +112,31 @@ vector<string> LinuxParser::CpuUtilization() {
     }
     
     return std::vector<string> {usertime, nicetime, systemtime, idletime, iowait, irq, softirq, steal, guest, guestnice};
-  
+}
+
+vector<string> LinuxParser::ProcessUtilization(int pid){
+    std::ifstream stream(kProcDirectory + to_string(pid) +  kStatFilename);
+    string var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12, var13, var14, var15, var16, var17, var18, var19, var20, var21, var22;
+    vector<string> reader;
+    string line;
+    if (stream.is_open()) {
+      std::getline(stream, line);
+      std::istringstream linestream(line);
+      linestream >> var1 >> var2 >> var3 >> var4 >> var5 >> var6 >> var7 >> var8 >> var9 >> var10 >> var11 >> var12 >> var13 >> var14 >> var15 >> var16 >> var17 >> var18 >> var19 >> var20 >> var21 >> var22;
+    }
+
+    return std::vector<string>{var14, var15, var16, var17, var22};
+
+
+  /*
+  /proc/[PID]/stat
+    #14 utime - CPU time spent in user code, measured in clock ticks
+    #15 stime - CPU time spent in kernel code, measured in clock ticks
+    #16 cutime - Waited-for children's CPU time spent in user code (in clock ticks)
+    #17 cstime - Waited-for children's CPU time spent in kernel code (in clock ticks)
+    #22 starttime - Time when the process started, measured in clock ticks
+
+  */
 }
 
 int LinuxParser::TotalProcesses() { 
@@ -125,19 +149,27 @@ int LinuxParser::RunningProcesses() {
   return std::stoi(GetValueFromFile(stream, "procs_running")); 
 }
 
-// TODO: Read and return the command associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Command(int pid[[maybe_unused]]) { return string(); }
+// Read and return the command associated with a process
+string LinuxParser::Command(int pid) { 
+  std::ifstream stream(kProcDirectory + to_string(pid) +  kCmdlineFilename);
+  if(stream.is_open()){
+    string line;
+    std::getline(stream, line);
+    return line;
+  }
+  return string(); 
+}
 
-// TODO: Read and return the memory used by a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Ram(int pid[[maybe_unused]]) { return string(); }
+
+string LinuxParser::Ram(int pid) { 
+  std::ifstream stream(kProcDirectory + to_string(pid) +  kStatusFilename);
+  return GetValueFromFile(stream, "VmSize:");
+}
 
 // Read and return the user ID associated with a process
 string LinuxParser::Uid(int pid) { 
   std::ifstream stream(kProcDirectory + to_string(pid) +  kStatusFilename);
-  auto test =  GetValueFromFile(stream, "Uid:");
-  return test;
+  return GetValueFromFile(stream, "Uid:");
 }
 
 

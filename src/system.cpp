@@ -37,7 +37,7 @@ Processor& System::Cpu() {
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
     return *_processes;
- }
+}
 
 string System::Kernel() { 
     return LinuxParser::Kernel(); 
