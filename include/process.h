@@ -9,11 +9,11 @@ It contains relevant attributes as shown below
 class Process {
  public:
     Process(int pid);
-    int Pid();                               
-    std::string User();                      
-    std::string Command();                   
-    float CpuUtilization();                  // TODO: See src/process.cpp
-    std::string Ram();                       
+    int Pid();
+    std::string User();
+    std::string Command();
+    float CpuUtilization();
+    std::string Ram();
     long int UpTime();                       // TODO: See src/process.cpp
     bool operator<(Process const& a) const;  // TODO: See src/process.cpp
 
@@ -23,7 +23,17 @@ class Process {
     std::string _user_uid; 
     std::string _user;
 
+    long _uptime;
+    long _hertz;
+
+    int _utime;
+    int _stime;
+    int _cutime;
+    int _cstime;
+    long _starttime;
+
     void FetchUID();
+    void UpdateProcessStats();
 };
 
 #endif

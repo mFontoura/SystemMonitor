@@ -7,6 +7,7 @@
 
 #include "process.h"
 #include "linux_parser.h"
+#include "format.h"
 
 using std::string;
 using std::to_string;
@@ -21,25 +22,27 @@ Process::Process(int pid){
 
 int Process::Pid() { return _pid; }
 
-// TODO: Return this process's CPU utilization
-float Process::CpuUtilization() { 
-    auto uptime = LinuxParser::UpTime();
-    auto Hertz = sysconf(_SC_CLK_TCK); 
+void Process::UpdateProcessStats(){
+    _uptime = LinuxParser::UpTime();
+    _hertz = sysconf(_SC_CLK_TCK); //TODO: cache var    
 
     auto procData = LinuxParser::ProcessUtilization(_pid);
-    int utime = stoi(procData.at(0));
-    int stime = stoi(procData.at(1));
-    int cutime = stoi(procData.at(2));
-    int cstime = stoi(procData.at(3));
-    long starttime = stol(procData.at(4));
+    _utime = stoi(procData.at(0));
+    _stime = stoi(procData.at(1));
+    _cutime = stoi(procData.at(2));
+    _cstime = stoi(procData.at(3));
+    _starttime = stol(procData.at(4));
+}
 
+float Process::CpuUtilization() { 
+    UpdateProcessStats();
     
 
-    auto total_time = utime + stime;
-    total_time = total_time + cutime + cstime;
-    auto seconds = uptime - (starttime / Hertz);
+    auto total_time = _utime + _stime;
+    total_time = total_time + _cutime + _cstime;
+    auto seconds = _uptime - (_starttime / _hertz);
     if(seconds != 0){
-        return 100 * ((total_time / Hertz) / seconds);
+        return ((float)(total_time / _hertz) / (float)seconds);
     }else{
         return 0;
     }
@@ -58,7 +61,9 @@ string Process::Ram() {
 string Process::User() { return _user; }
 
 // TODO: Return the age of this process (in seconds)
-long int Process::UpTime() { return 0; }
+long int Process::UpTime() {
+    return LinuxParser::UpTime(_pid);  
+}
 
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function

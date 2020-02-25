@@ -75,6 +75,7 @@ float LinuxParser::MemoryUtilization() {
   return percent * .01;
  }
 
+// Uptime of the system
 long LinuxParser::UpTime() {
   string line, uptime, idle;
   std::ifstream stream(kProcDirectory + kUptimeFilename);
@@ -193,8 +194,21 @@ string LinuxParser::User(string uid_s) {
 }
 
 // TODO: Read and return the uptime of a process
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
+long LinuxParser::UpTime(int pid) { 
+  auto hertz = sysconf(_SC_CLK_TCK);
+
+  std::ifstream stream(kProcDirectory + to_string(pid) +  kStatFilename);
+  string var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12, var13, var14, var15, var16, var17, var18, var19, var20, var21, var22;
+  vector<string> reader;
+  string line;
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    linestream >> var1 >> var2 >> var3 >> var4 >> var5 >> var6 >> var7 >> var8 >> var9 >> var10 >> var11 >> var12 >> var13 >> var14 >> var15 >> var16 >> var17 >> var18 >> var19 >> var20 >> var21 >> var22;
+  }
+
+  return UpTime() - std::stol(var22)/hertz;   
+}
 
 string LinuxParser::GetValueFromFile(std::ifstream &stream, string label){
   string lineLabel, value, line;
