@@ -24,7 +24,7 @@ int Process::Pid() { return _pid; }
 
 void Process::UpdateProcessStats(){
     _uptime = LinuxParser::UpTime();
-    _hertz = sysconf(_SC_CLK_TCK); //TODO: cache var    
+    _hertz = sysconf(_SC_CLK_TCK);   
 
     auto procData = LinuxParser::ProcessUtilization(_pid);
     _utime = stoi(procData.at(0));
