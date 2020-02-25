@@ -48,19 +48,19 @@ float Process::CpuUtilization() {
     }
 }
 
-// TODO: Return the command that generated this process
+// Return the command that generated this process
 string Process::Command() {
     return LinuxParser::Command(_pid);    
 }
 
-// TODO: Return this process's memory utilization
+// Return this process's memory utilization
 string Process::Ram() { 
     return LinuxParser::Ram(_pid) + " KB"; 
 }
 
 string Process::User() { return _user; }
 
-// TODO: Return the age of this process (in seconds)
+// Return the age of this process (in seconds)
 long int Process::UpTime() {
     return LinuxParser::UpTime(_pid);  
 }

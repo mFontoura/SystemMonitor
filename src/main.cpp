@@ -5,14 +5,5 @@
 
 int main() {
   System system;
-  /*std::cout<<system.Processes()[0].CpuUtilization() * 100<<std::endl;
-  std::cout<<system.Processes()[0].CpuUtilization() * 100<<std::endl;
-  std::cout<<system.Processes()[0].CpuUtilization() * 100<<std::endl;
-  std::cout<<system.Processes()[0].CpuUtilization() * 100<<std::endl;
-  std::cout<<system.Processes()[0].CpuUtilization() * 100<<std::endl;
-  std::cout<<system.Processes()[0].CpuUtilization() * 100<<std::endl;
-  std::cout<<system.Processes()[0].CpuUtilization() * 100<<std::endl;
-  std::cout<<system.Processes()[0].CpuUtilization() * 100<<std::endl;
-  std::cout<<system.Processes()[0].CpuUtilization() * 100<<std::endl;*/
   NCursesDisplay::Display(system);
 }

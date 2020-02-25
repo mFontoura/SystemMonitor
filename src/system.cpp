@@ -34,7 +34,6 @@ Processor& System::Cpu() {
     return *_cpu;
  }
 
-// TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
     return *_processes;
 }

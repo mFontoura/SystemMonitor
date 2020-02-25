@@ -117,27 +117,23 @@ vector<string> LinuxParser::CpuUtilization() {
 
 vector<string> LinuxParser::ProcessUtilization(int pid){
     std::ifstream stream(kProcDirectory + to_string(pid) +  kStatFilename);
-    string var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12, var13, var14, var15, var16, var17, var18, var19, var20, var21, var22;
+    string key;//, var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12, var13, var14, var15, var16, var17, var18, var19, var20, var21, var22;
     vector<string> reader;
     string line;
     if (stream.is_open()) {
       std::getline(stream, line);
       std::istringstream linestream(line);
-      linestream >> var1 >> var2 >> var3 >> var4 >> var5 >> var6 >> var7 >> var8 >> var9 >> var10 >> var11 >> var12 >> var13 >> var14 >> var15 >> var16 >> var17 >> var18 >> var19 >> var20 >> var21 >> var22;
+      int i = 0;
+      while(linestream >> key) {
+        if(i == 13 || i == 14 || i == 15 || i == 16 || i == 21) {          
+          reader.push_back(key);
+          if(i == 21) break;
+        }
+        i++;
+      } 
     }
 
-    return std::vector<string>{var14, var15, var16, var17, var22};
-
-
-  /*
-  /proc/[PID]/stat
-    #14 utime - CPU time spent in user code, measured in clock ticks
-    #15 stime - CPU time spent in kernel code, measured in clock ticks
-    #16 cutime - Waited-for children's CPU time spent in user code (in clock ticks)
-    #17 cstime - Waited-for children's CPU time spent in kernel code (in clock ticks)
-    #22 starttime - Time when the process started, measured in clock ticks
-
-  */
+    return reader;
 }
 
 int LinuxParser::TotalProcesses() { 
@@ -193,21 +189,28 @@ string LinuxParser::User(string uid_s) {
   }
 }
 
-// TODO: Read and return the uptime of a process
+// Read and return the uptime of a process
 long LinuxParser::UpTime(int pid) { 
   auto hertz = sysconf(_SC_CLK_TCK);
 
   std::ifstream stream(kProcDirectory + to_string(pid) +  kStatFilename);
-  string var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12, var13, var14, var15, var16, var17, var18, var19, var20, var21, var22;
+  string key, starttime;
   vector<string> reader;
   string line;
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream linestream(line);
-    linestream >> var1 >> var2 >> var3 >> var4 >> var5 >> var6 >> var7 >> var8 >> var9 >> var10 >> var11 >> var12 >> var13 >> var14 >> var15 >> var16 >> var17 >> var18 >> var19 >> var20 >> var21 >> var22;
+    int i = 0;
+    while(linestream >> key) {
+      if(i == 21) {    
+        starttime = key;
+        break;
+      }
+      i++;
+    } 
   }
 
-  return UpTime() - std::stol(var22)/hertz;   
+  return UpTime() - std::stol(starttime)/hertz;   
 }
 
 string LinuxParser::GetValueFromFile(std::ifstream &stream, string label){
