@@ -35,14 +35,14 @@ void Process::UpdateProcessStats(){
 }
 
 float Process::CpuUtilization() { 
-    UpdateProcessStats();
-    
+    UpdateProcessStats();    
 
     auto total_time = _utime + _stime;
     total_time = total_time + _cutime + _cstime;
     auto seconds = _uptime - (_starttime / _hertz);
     if(seconds != 0){
-        return ((float)(total_time / _hertz) / (float)seconds);
+        _cpu = ((float)(total_time / _hertz) / (float)seconds);
+        return _cpu;
     }else{
         return 0;
     }
@@ -55,7 +55,7 @@ string Process::Command() {
 
 // Return this process's memory utilization
 string Process::Ram() { 
-    return LinuxParser::Ram(_pid) + " KB"; 
+    return LinuxParser::Ram(_pid) + " MB"; 
 }
 
 string Process::User() { return _user; }
@@ -65,9 +65,9 @@ long int Process::UpTime() {
     return LinuxParser::UpTime(_pid);  
 }
 
-// TODO: Overload the "less than" comparison operator for Process objects
-// REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a[[maybe_unused]]) const { return true; }
+bool Process::operator<(Process const& a) const { 
+    return this->_cpu < a._cpu;
+}
 
 void Process::FetchUID(){
     _user_uid = LinuxParser::Uid(_pid);

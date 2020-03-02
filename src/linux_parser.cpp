@@ -160,7 +160,13 @@ string LinuxParser::Command(int pid) {
 
 string LinuxParser::Ram(int pid) { 
   std::ifstream stream(kProcDirectory + to_string(pid) +  kStatusFilename);
-  return GetValueFromFile(stream, "VmSize:");
+  auto ramInKb = std::stol(GetValueFromFile(stream, "VmSize:"));
+  auto ramInMb = ramInKb / 1024.0; 
+
+  string ramInMbStr = to_string(ramInMb);
+  int pos = ramInMbStr.find(".");
+
+  return ramInMbStr.substr(0, pos + 2);
 }
 
 // Read and return the user ID associated with a process
@@ -173,15 +179,15 @@ string LinuxParser::Uid(int pid) {
 string LinuxParser::User(string uid_s) { 
   string line;
   string user;
-  string value1;
-  string value2;
+  string dummy_value; // dummy_value is only used to parse the necessary values of a line.
+  string lineUID;
   std::ifstream filestream(kPasswordPath);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
       std::replace(line.begin(), line.end(), ':', ' ');
       std::istringstream linestream(line);
-      while (linestream >> user >> value1 >> value2) {
-        if (value2 == uid_s) {
+      while (linestream >> user >> dummy_value >> lineUID) {
+        if (lineUID == uid_s) {
           return user;
         }
       }

@@ -27,6 +27,8 @@ System::System(){
         Process* newProc = new Process(pids.at(i));
         _processes->push_back(*newProc);
     }    
+    std::sort(_processes->begin(), _processes->end());
+    std::reverse(_processes->begin(), _processes->end());
 }
 
 Processor& System::Cpu() { 
