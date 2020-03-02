@@ -23,7 +23,7 @@ System::System(){
 
     auto pids = LinuxParser::Pids();
     _processes = new vector<Process>;
-    for (int i = 0; i < pids.size(); i++){
+    for (std::size_t i = 0; i < pids.size(); i++){
         Process* newProc = new Process(pids.at(i));
         _processes->push_back(*newProc);
     }    

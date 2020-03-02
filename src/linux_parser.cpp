@@ -187,6 +187,8 @@ string LinuxParser::User(string uid_s) {
       }
     }
   }
+
+  return "";
 }
 
 // Read and return the uptime of a process
